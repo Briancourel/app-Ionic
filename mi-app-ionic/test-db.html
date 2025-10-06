@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Test Database</title>
+</head>
+
+<body>
+  <h1>Test Database Functions</h1>
+  <button onclick="testAddClient()">Test Add Client</button>
+  <button onclick="testGetClients()">Test Get Clients</button>
+  <div id="result"></div>
+
+  <script>
+    // Simular el localStorage con datos de ejemplo
+    if (!localStorage.getItem('trainerDB')) {
+      const sampleData = {
+        clients: [
+          {
+            id: 1,
+            name: "Juan Pérez",
+            phone: "+54 9 11 1234-5678",
+            email: "juan@email.com",
+            birth_date: "1990-05-15",
+            emergency_contact: "+54 9 11 8765-4321",
+            notes: "Cliente regular",
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }
+        ],
+        payments: [],
+        sessions: [],
+        reminders: []
+      };
+      localStorage.setItem('trainerDB', JSON.stringify(sampleData));
+    }
+
+    function testAddClient() {
+      const data = localStorage.getItem('trainerDB');
+      if (data) {
+        const parsed = JSON.parse(data);
+        const newId = Math.max(...parsed.clients.map(c => c.id || 0)) + 1;
+        const newClient = {
+          id: newId,
+          name: "Test Client",
+          phone: "+54 9 11 9999-9999",
+          email: "test@email.com",
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        };
+        parsed.clients.push(newClient);
+        localStorage.setItem('trainerDB', JSON.stringify(parsed));
+        document.getElementById('result').innerHTML = 'Client added successfully!';
+      }
+    }
+
+    function testGetClients() {
+      const data = localStorage.getItem('trainerDB');
+      if (data) {
+        const parsed = JSON.parse(data);
+        document.getElementById('result').innerHTML = 'Clients: ' + JSON.stringify(parsed.clients, null, 2);
+      }
+    }
+  </script>
+</body>
+
+</html>
